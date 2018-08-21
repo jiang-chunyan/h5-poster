@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="format-detection" content="telephone=no"/>
+    <title>中秋节海报</title>
+    <script src="js/flexible.js"></script>
+    <script src="js/html2canvas.js"></script>
+    <link rel="stylesheet" href="css/index.css"/>
+</head>
+<body>
+    <!--音乐 Start-->
+    <aside id="music" class="music-pulse">
+        <audio id="audio" src="music.mp3" type="audio/mpeg"></audio>
+    </aside>
+    <!--音乐 End-->
+    <!--加载效果 Start-->
+    <div class="ui-loading-wrap" id="loading">
+        <i class="ui-loading"></i>
+        <p>加载中...</p>
+    </div>
+    <!--加载效果 End-->
+    <!--第一屏 Start-->
+    <section class="section" id="first" style="display:none">
+        <img src="img/blank.gif" data-src="img/1.png" class="slogan" style=""/>
+        <img src="img/blank.gif" data-src="img/3.jpg" class="father-img"/ style="width:257px;height:310px;">
+
+        <button type="button" id="btnGenerate" class="btn-large-x" data-track="生成中秋节海报">
+            <input id="upload" name="upload" type="file" accept="image/*" onfocus="this.blur()"/>
+            生成中秋节海报
+        </button>
+    </section>
+    <!--第一屏 End-->
+    <!--第二屏 Start-->
+    <section class="section section-top" style="display:none" id="second">
+        <h6 class="h6">拖拽进行照片编辑</h6>
+        <div class="frame" id="frame">
+            <img src="img/blank.gif" data-src="" class="word" id="word" />
+            <img src="img/blank.gif" id="frameImg" class="frame-img"/>
+            <div class="" id="daiyan_txt" style="z-index: 4;position: relative;top: 60%;text-align: center;">
+               <p class="point">
+                   <input type="text" placeholder="" class="pointtxt" id="ziti" style="text-align: center;border: none;outline: none;font-family: '';">
+               </p>
+            </div>
+        </div>
+
+        <div class="" id="daiyan_txt2" style="z-index: 4;position: relative;top: 60%;text-align: center;">
+           <p class="point">
+               <input type="text" placeholder="(填写您的祝福：)" class="pointtxt2" id="cc2" style="text-align: center;border: none;outline: none;">
+           </p>
+        </div>
+
+        <div class="ui-justify">
+            <button type="button" class="btn-middle" id="confirm" data-track="确认">确认</button>
+            <button type="button" id="btnRotate" class="btn-middle">旋转</button>
+            <button type="button" id="btnCancel" class="btn-middle" data-track="取消">取消</button>
+        </div>
+    </section>
+    <!-- <button type="button" id="btnConfirm" class="btn-middle" data-track="确认" onclick="bbb()">确认</button> -->
+    <!--第二屏 End-->
+    <!--第三屏 Start-->
+    <section class="section section-top2" style="display: none" id="third">
+        <div class="frame">
+            <img src="img/blank.gif" class="db-img" id="compose"/>
+        </div>
+        <div class="ui-justify">
+            <button type="button" id="btnShare" class="btn-large" data-track="分享现在">
+                <h1>分享现在</h1>
+                <h2>朋友圈晒海报</h2>
+            </button>
+            <button type="button" id="btnBack" class="btn-large">
+                <h1>回到过去</h1>
+                <h2>重新上传照片</h2>
+            </button>
+        </div>
+    </section>
+    <!--第三屏 End-->
+    <!--底部花纹 Start-->
+    <footer class="footer">
+    </footer>
+    <!--底部花纹 End-->
+    <!--弹出框 Start-->
+    <aside class="dialog" style="display: none" id="dialog">
+        <p>长按海报即可将图片保存至手机</p>
+        <button type="button" class="btn-large-x">我知道了</button>
+    </aside>
+    <!--弹出框 End-->
+    <script src="build/js/touch.js"></script>
+    <!-- <script src="build/js/hidpi-canvas.js"></script> -->
+    <script src="build/js/index.bundle.js"></script>
+    <script src="js/jquery-1.11.0.min.js"></script>
+    <script type="text/javascript">
+        // window.onload = function() {
+            var string = "img/word2.png";   //原始数据
+            var array = string.split(",");           //转化为数组
+            var value = array[Math.round(Math.random()*(array.length-1))];  //随机抽取一个值
+            $('.word').attr('data-src', value);
+
+
+            var ziti = "YouYuan, STCaiyun";   //原始数据
+            var zitiArray = ziti.split(",");           //转化为数组
+            var zitiValue = zitiArray[Math.round(Math.random()*(zitiArray.length-1))];  //随机抽取一个值
+            $('#ziti').css('font-family', zitiValue);
+        // }
+    </script>
+
+    <script>
+         function convertCanvasToImage(canvas){
+              //新Image对象,可以理解为DOM;
+              var image = new Image();
+              //canvas.toDataURL返回的是一串Base64编码的URL,当然,浏览器自己肯定支持
+              //指定格式PNG
+              image.src = canvas.toDataURL("image/png");
+              return image;
+         }
+
+         function convert2canvas() {
+             console.log('convert');
+             var shareContent = document.getElementById('frame');
+             var width = shareContent.offsetWidth;
+             var height = shareContent.offsetHeight;
+             console.log('width, height', width, height);
+             var canvas = document.createElement("canvas");
+             var scale = 2;
+
+             canvas.width = width * scale;
+             canvas.height = height * scale;
+             canvas.getContext("2d").scale(scale, scale);
+
+             var opts = {
+                 scale: scale,
+                 canvas: canvas,
+                 logging: true,
+                 width: width,
+                 height: height
+             };
+             html2canvas(shareContent, opts).then(function (canvas) {
+                 var context = canvas.getContext('2d');
+                 var img = convertCanvasToImage(canvas);
+                 document.body.appendChild(img);
+                 $(img).css({
+                     "width": canvas.width / 2 + "px",
+                     "height": canvas.height / 2 + "px",
+                     "display": "block",
+                     "margin-left": "auto",
+                     "margin-right": "auto",
+                 })
+             });
+         }
+
+
+         function bbb() {
+             var a = $('.pointtxt2').val();
+             $('.pointtxt').val(a);
+
+             convert2canvas()
+         }
+
+
+         $('#confirm').on('click', function() {
+             var a = $('.pointtxt2').val();
+             $('.pointtxt').val(a);
+
+             convert2canvas()
+         });
+    </script>
+</body>
+</html>
